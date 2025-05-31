@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cristal Sémantique v0.1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col">
+  <!-- Header -->
+  <header class="bg-gray-800 shadow-md p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Cristal Sémantique</h1>
+    <span class="text-sm text-gray-400">Mode : Devine le mot</span>
+  </header>
+
+  <!-- Chat Display + Input -->
+  <main class="flex flex-1">
+    <!-- Chat messages -->
+    <section class="w-1/3 bg-gray-850 border-r border-gray-700 p-4 overflow-y-auto" id="chat">
+      <h2 class="text-xl font-semibold mb-4">Messages Live</h2>
+      <!-- Messages will appear here -->
+    </section>
+
+    <!-- Game area -->
+    <section class="flex-1 p-6 flex flex-col justify-center items-center text-center">
+      <div class="w-full max-w-xl">
+        <h2 class="text-xl mb-2">Proposition la plus proche :</h2>
+        <div id="topGuess" class="bg-green-600 rounded-lg py-4 px-6 text-2xl font-bold mb-6">---</div>
+
+        <input id="guessInput" type="text" placeholder="Tape ton mot..." class="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+        <button onclick="submitGuess()" class="mt-4 px-6 py-2 rounded bg-cyan-600 hover:bg-cyan-700 font-semibold">Valider</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-center text-sm text-gray-500 py-3">
+    Cristal Sémantique v0.1 — Propulsé par ChatGPT & Node.js
+  </footer>
+
+  <!-- Script Simulation -->
+  <script>
+    const chat = document.getElementById('chat');
+    const topGuess = document.getElementById('topGuess');
+
+    function addMessage(platform, user, message, score) {
+      const div = document.createElement('div');
+      div.className = 'mb-2';
+      div.innerHTML = `<span class="text-xs text-gray-500">[${platform.toUpperCase()}]</span> <strong>${user}</strong> : ${message} <span class="text-cyan-400">(${score})</span>`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+
+      if (!topGuess.innerText || score < parseInt(topGuess.dataset.score || 9999)) {
+        topGuess.innerText = `${message} (${score})`;
+        topGuess.dataset.score = score;
+      }
+    }
+
+    function submitGuess() {
+      const input = document.getElementById('guessInput');
+      const word = input.value.trim();
+      if (!word) return;
+      const fakeScore = Math.floor(Math.random() * 1500); // Simulated proximity
+      addMessage('local', 'Toi', word, fakeScore);
+      input.value = '';
+    }
+  </script>
+</body>
+</html>
